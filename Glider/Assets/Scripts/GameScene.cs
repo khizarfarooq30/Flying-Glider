@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameScene : MonoBehaviour
 {
@@ -10,13 +11,33 @@ public class GameScene : MonoBehaviour
     private float fadeInDuration = 2f;
     private bool isGameStarted;
 
-    void Start(){ 
+    public Transform arrow;
+    private Transform playerTransform;
+    public Objective objective;
+
+    void Start(){  
+
+         playerTransform = FindObjectOfType<PlayerMotor>().transform;
+
+        SceneManager.LoadScene(Manager.Instance.currentLevel.ToString(), LoadSceneMode.Additive);
+
         fadeGroup = FindObjectOfType<CanvasGroup>();
 
         fadeGroup.alpha = 1;
     }
 
     private void Update() {
+
+        if(objective != null) {
+            // if we have an objective 
+            
+            Vector3 dir = playerTransform.InverseTransformPoint(objective.GetCurrentRing().position);
+            float a = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+
+            a += 180;
+            arrow.transform.localEulerAngles = new Vector3(0,180,a);
+        }
+
         if(Time.timeSinceLevelLoad <= fadeInDuration) 
         {
             fadeGroup.alpha = 1 - (Time.timeSinceLevelLoad / fadeInDuration);

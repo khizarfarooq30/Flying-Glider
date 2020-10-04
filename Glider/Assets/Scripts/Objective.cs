@@ -12,8 +12,15 @@ public class Objective : MonoBehaviour
    
    private int ringPassed = 0;
 
+   public Transform GetCurrentRing() {
+       return rings[ringPassed];
+   }
+
    private void Start() 
    {
+
+       FindObjectOfType<GameScene>().objective = this;
+
        // at the start of the level, assign inactive to all the rings
        foreach (Transform t in transform)
        {

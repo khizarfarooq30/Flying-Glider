@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMotor : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class PlayerMotor : MonoBehaviour
     private float baseSpeed = 10.0f;
     private float rotationSpeedX = 3.0f;
     private float rotationSpeedY = 1.5f;
+
+    private float deathTime;
+    private float deathDuration;
+
+    public GameObject deathFx; 
 
     private void Start() {
         controller = GetComponent<CharacterController>();
@@ -23,6 +29,16 @@ public class PlayerMotor : MonoBehaviour
     }
 
     private void Update() {
+
+        if(deathTime != 0) {
+            if(Time.time - deathTime > deathDuration) {
+                SceneManager.LoadScene("Game");
+            }
+
+            return;
+        }
+
+
         // give player the forward velocity
         Vector3 moveVector = transform.forward * baseSpeed;
 
@@ -51,5 +67,15 @@ public class PlayerMotor : MonoBehaviour
         }
 
         controller.Move(moveVector * Time.deltaTime);
+    }
+    
+    private void OnControllerColliderHit(ControllerColliderHit hit) {
+        deathTime = Time.time;
+
+        GameObject go = Instantiate(deathFx) as GameObject;
+
+        go.transform.position = transform.position;
+
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 }

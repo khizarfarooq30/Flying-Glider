@@ -6,6 +6,7 @@ public class SaveManager : MonoBehaviour {
     public SaveState state;
 
     private void Awake() {
+
         DontDestroyOnLoad(gameObject);
         Instance = this;
         Load();
@@ -22,12 +23,12 @@ public class SaveManager : MonoBehaviour {
 
     //save the whole state of this savestate script to player prefs
     public void Save() {
-         PlayerPrefs.SetString("save", HelperScript.Serialize<SaveState>(state));
+         PlayerPrefs.SetString("save", HelperScript.Encrypt(HelperScript.Serialize<SaveState>(state)));
     }
 
     public void Load() {
         if(PlayerPrefs.HasKey("save")){
-            state = HelperScript.Deserialize<SaveState>(PlayerPrefs.GetString("save"));
+            state = HelperScript.Deserialize<SaveState>(HelperScript.Decrypt(PlayerPrefs.GetString("save")));
         } else {
             state = new SaveState();
             Save();

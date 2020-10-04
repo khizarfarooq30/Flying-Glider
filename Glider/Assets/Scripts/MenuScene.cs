@@ -51,9 +51,7 @@ public class MenuScene : MonoBehaviour
     // Start is called before the first frame update
     void Start() 
     {
-        // temp gold 
-        SaveManager.Instance.state.gold = 999;
-
+   
         //check if we have a accelorometer
         if(SystemInfo.supportsAccelerometer) {
             // it is currently enabled
@@ -145,8 +143,6 @@ public class MenuScene : MonoBehaviour
             }
         }
     }
-
-    
 
     private void InitShop(){
         //make sure we assign the references..
